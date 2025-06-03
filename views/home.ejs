@@ -303,6 +303,12 @@
             backdrop-filter: blur(10px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             letter-spacing: 0.5px;
+            cursor: pointer;
+            width: 120px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .logout-btn:hover {
@@ -421,8 +427,23 @@
 
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1 style="margin-bottom: 0;">URL Shortener</h1>
-            <a href="/login" class="logout-btn">Logout</a>
+            <h1 style="
+                margin-bottom: 0;
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 2rem;
+                font-weight: bold;
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                ">
+                URL Shortener
+            </h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
         
         <!-- Success message (shown when URL is generated) -->
@@ -486,6 +507,31 @@
     </div>
 
     <script>
+        // Proper logout function that clears cookies
+        function logout() {
+            // Clear all cookies by setting them to expire in the past
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Also specifically target common authentication cookie names
+            const cookieNames = ['token', 'auth', 'session', 'sessionId', 'authToken', 'jwt', 'connect.sid'];
+            cookieNames.forEach(name => {
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+            });
+            
+            // Optional: Clear localStorage and sessionStorage as well
+            if (typeof(Storage) !== "undefined") {
+                localStorage.clear();
+                sessionStorage.clear();
+            }
+            
+            // Redirect to login page
+            window.location.href = '/login';
+        }
+
         // Form submission with loading state
         document.getElementById('urlForm').addEventListener('submit', function(e) {
             const form = this.closest('.card');
