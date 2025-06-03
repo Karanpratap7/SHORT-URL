@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
+  "keywords": ["url-shortener", "nodejs", "express"],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "A URL shortener service built with Node.js and Express",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "ejs": "^3.1.10",
